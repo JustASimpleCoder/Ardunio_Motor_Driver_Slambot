@@ -8,6 +8,7 @@
 
 # define PI 3.14159265358979323846
 # define ARDUINO_SERIAL_BAUD_RATE 9600
+# define SPEED_INCREASE_STEP 5
 
 #include "Arduino.h"
 
@@ -19,6 +20,12 @@
 // const int TURN_LEFT_OPP = 5; // both side of robot move in opposite dir  
 // const int TURN_RIGHT_OPP = 6; //both side of robot move in opposite dir  
 // const int INVALID = -1;
+
+
+enum Direction {
+    BACKWARD = 0,
+    FORWARD,
+ };
 
 enum class SpeedLimit {
     MIN = 125,
@@ -70,17 +77,16 @@ class MotorCommands {
         ~MotorCommands(){
             //stopMotors();
         }
-    
-        void getMotorData();
-        
-        void getOdom();
 
         void setupArduino();
 
-        void SetSingleMotorDir(bool forward);
+        void SetSingleMotorDirection(Motor motor, Direction direction);
 
-        void SetMotorDir(bool left_front_wheel_forward, bool left_back_wheel_forward,
-                                bool right_front_wheel_forward, bool right_back_wheel_forward);
+        void SetTwoMotorDirection(  Motor motor1, Direction direction1,
+                                    Motor motor2, Direction direction2);
+
+        void SetAllMotorDirection(Direction left_front_wheel_forward, Direction left_back_wheel_forward,
+                                Direction right_front_wheel_forward, Direction right_back_wheel_forward);
 
         void SetMotorDirTest();
         void SetMotorSpeed();
@@ -89,7 +95,6 @@ class MotorCommands {
 
         void moveForward();
         void moveBackward();
-
 
         void turnLeft();
         void turnRight();
@@ -102,7 +107,6 @@ class MotorCommands {
 
         void moveBackwardRightDiag();
         void moveBackwardLeftDiag();
-        
 
         void changeSpeed(bool increase);
 
@@ -113,8 +117,6 @@ class MotorCommands {
         void setStartingSpeed();
 
         void loopMotorControl();
-
-        void turn(bool right);
         
     private:
         Motor right_back;

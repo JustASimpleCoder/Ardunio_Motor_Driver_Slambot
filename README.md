@@ -8,7 +8,7 @@ This repository contains Arduino Uno code to be used with Platformio for control
 
 * Customizable Pin Configuration: Pin connections are stored in the Motor class and initialized using the MotorCommand class. You can set up your pins however you prefer, but ensure that the speed pin is connected to one of the PWM pins on the Arduino.
 
-#Pin Configuration 
+# Pin Configuration 
 
 Ensure that:
 
@@ -18,7 +18,7 @@ Ensure that:
 
 The four wheel mecanum wheel can provide omnidirectional movement, by control each motors direction and speed.
 
-#Command Interface
+# Command Interface
 
 The robot accepts serial commands to control movement, which are mapped using the following enum class:
 
