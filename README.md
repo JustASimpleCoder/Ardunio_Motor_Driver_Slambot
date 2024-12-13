@@ -1,6 +1,6 @@
 # Arduino Uno Code for 4-Wheel Mecanum Drive
 
-This repository contains Arduino Uno code for controlling a 4-wheel differential mecanum drive. The motors used are inexpensive "TT motors," each with two wires: one for voltage input and one for output. An L298N motor driver is used to control the left-side and right-side motors.
+This repository contains Arduino Uno code to be used with Platformio for controlling a 4-wheel differential mecanum drive. The motors used are inexpensive "TT motors," each with two wires: one for voltage input and one for output. An L298N motor driver is used to control the left-side and right-side motors.
 
 # Features
 
@@ -45,7 +45,7 @@ Additional commands will be added in future updates.
 
 # Visual Representiation
 
-![alt text](README_IMAGES/MecanumWheelDiagram.png)
+![alt text](README_Images/MecanumWheelDiagram.png)
 
 source: https://www.researchgate.net/figure/Movements-of-a-Mecanum-wheel-driven-robot-to-any-directions-side-arrows-indicate-wheel_fig1_367879750
 
