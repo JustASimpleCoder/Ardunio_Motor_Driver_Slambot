@@ -22,28 +22,48 @@ The four wheel mecanum wheel can provide omnidirectional movement, by control ea
 
 The robot accepts serial commands to control movement, which are mapped using the following enum class:
 
-enum class RobotMovement: char{};
+enum class RobotMovement: char{
+    STOP = 'x',  <br />
+    MOVE_FORWARD = 'w',  <br />
+    MOVE_BACKWARD = 's', <br />
+    MOVE_LEFT = 'l', <br />
+    MOVE_RIGHT = 'r', <br />
+    ROTATE_LEFT = 'a', <br />
+    ROTATE_RIGHT = 'd', <br />
+    DIAG_FORWARD_RIGHT = 'e', <br />
+    DIAG_BACKWARD_RIGHT = 'c', <br />
+    DIAG_FORWARD_LEFT = 'q', <br />
+    DIAG_BACKWARD_LEFT = 'z', <br />
+    FASTER = '+', <br />
+    SLOWER = '-', <br />
+    INVALID = '?' <br />
+}; <br />
 
 * STOP: Halts all motor activity.
 * MOVE_FORWARD / MOVE_BACKWARD: Moves the robot forward or backward.
-* TURN_LEFT / TURN_RIGHT: Rotates the robot in place to the left or right.
-* TURN_LEFT_OPP / TURN_RIGHT_OPP: Performs lateral strafing motions to the left or right.
+* ROTATE_LEFT / ROTATE_RIGHT: Rotates the robot in place to the left (CCW when looking down) or right (CW when look down).
+* MOVE_LEFT / MOVE_RIGHT: Performs lateral strafing motions to the left or right.
+* DIAG_FORWARD_RIGHT/ DIAG_BACKWARD_RIGHT / DIAG_FORWARD_LEFT DIAG_BACKWARD_LEFT: moves diagnoanlly in left/right along with front/back
 * FASTER / SLOWER: Adjusts the robot's speed incrementally.
 * INVALID: Handles unrecognized commands.
 
 Additional commands will be added in future updates.
 
-# How it workds
+# How it works
 
 1. Motor Initialization:
 *  Motors are initialized via the Motor class, which handles pin configurations and operations.
+* Motor classes are instatitated by the MotorCommands class, to change pin configurations you need to update the constructor in MotorCommand class to properly call the Motor class with the correct pin configs.
 2. Command Processing:
 * Serial commands are read and translated into movements using the RobotMovement enum.
+* Serial communication invokes the Arduino Serial library and is set to a baud rate of 9600 by default.
+
 3. Omnidirectional Control:
 * By adjusting motor speed and direction, the robot achieves full omnidirectional movement.
+* MotorCommand class contains functions that move the robot by controlling each motor, using the Mecanum Wheel for omnidirectional control (see Visual Representation section below for help).
 
 
-# Visual Representiation
+# Visual Representation
 
 ![alt text](README_Images/MecanumWheelDiagram.png)
 
@@ -52,12 +72,16 @@ source: https://www.researchgate.net/figure/Movements-of-a-Mecanum-wheel-driven-
 # Future updates
 Planned improvements:
 
-* Adding more movement commands.
+* Adding more movement commands. (have forward/back, lateral, diagonally and rotation around center, can add more rotations and other wheel movements)
 * Enhancing motor control algorithms for smoother performance.
 * Support for additional motor driver configurations.
 
 
 Feel free to explore, modify, and contribute to this project! If you encounter any issues or have suggestions for improvement, open an issue or submit a pull request.
 
-#useful links
+# useful links
 https://www.matec-conferences.org/articles/matecconf/pdf/2021/12/matecconf_mse21_08003.pdf
+
+https://control.ros.org/rolling/doc/ros2_controllers/doc/mobile_robot_kinematics.html#mobile-robot-kinematics
+
+https://robofoundry.medium.com/ros2-control-differential-drive-robot-project-part-1-mechanical-build-2a323da04992

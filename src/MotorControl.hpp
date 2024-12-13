@@ -29,10 +29,14 @@ enum class RobotMovement: char{
     STOP = 'x',
     MOVE_FORWARD = 'w',
     MOVE_BACKWARD = 's',
-    TURN_LEFT = 'l',
-    TURN_RIGHT = 'r',
-    TURN_LEFT_OPP = 'a',
-    TURN_RIGHT_OPP = 'd',
+    MOVE_LEFT = 'l',
+    MOVE_RIGHT = 'r',
+    ROTATE_LEFT = 'a',
+    ROTATE_RIGHT = 'd',
+    DIAG_FORWARD_RIGHT = 'e',
+    DIAG_BACKWARD_RIGHT = 'c',
+    DIAG_FORWARD_LEFT = 'q',
+    DIAG_BACKWARD_LEFT = 'z',
     FASTER = '+',
     SLOWER = '-',
     INVALID = '?'
@@ -73,6 +77,8 @@ class MotorCommands {
 
         void setupArduino();
 
+        void SetSingleMotorDir(bool forward);
+
         void SetMotorDir(bool left_front_wheel_forward, bool left_back_wheel_forward,
                                 bool right_front_wheel_forward, bool right_back_wheel_forward);
 
@@ -92,10 +98,10 @@ class MotorCommands {
         void moveLeft();
 
         void moveForwardRightDiag();
-        void moveForwardleftDiag();
+        void moveForwardLeftDiag();
 
         void moveBackwardRightDiag();
-        void moveBackwardsleftDiag();
+        void moveBackwardLeftDiag();
         
 
         void changeSpeed(bool increase);
@@ -115,8 +121,6 @@ class MotorCommands {
         Motor right_front;
         Motor left_front;
         Motor left_back;
-
-        void (MotorCommands::*lastCommand)();
         
         bool m_forwards = true;
         bool m_backwards = false;

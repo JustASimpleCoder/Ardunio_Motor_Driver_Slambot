@@ -102,6 +102,11 @@ void MotorCommands::setStartingSpeed() {
     }
 }
 
+void MotorCommands::SetSingleMotorDir(bool forward){
+
+}
+
+//TODO:change name to setCombinedMotorDIr or SetAllMotorDir
 void MotorCommands::SetMotorDir(bool left_front_wheel_forward, bool left_back_wheel_forward,
                                 bool right_front_wheel_forward, bool right_back_wheel_forward){
         right_front.setDirection(right_front_wheel_forward);
@@ -158,24 +163,16 @@ void MotorCommands::moveBackward() {
     SetMotorSpeed();
 }
 
-void MotorCommands::turn(bool rightTurn) {
+void MotorCommands::turnLeft() {
     setStartingSpeed();
-    if(rightTurn){
-        //for a right run, right side should move backwards and left side forwards
-        SetMotorDir(m_backwards, m_forwards, m_forwards, m_backwards);
-    }else{
-        //for a left run, right side should move forwards and left side backwards
-        SetMotorDir(m_forwards, m_backwards, m_backwards, m_forwards);
-    }
+    SetMotorDir(m_forwards, m_backwards, m_backwards, m_forwards);
     SetMotorSpeed();
 }
 
-void MotorCommands::turnLeft() {
-    turn(false);
-}
-
 void MotorCommands::turnRight() {
-    turn(true);
+    setStartingSpeed();
+    SetMotorDir(m_backwards, m_forwards, m_forwards, m_backwards);
+    SetMotorSpeed();
 }
 
 void MotorCommands::moveRight(){
@@ -192,17 +189,48 @@ void MotorCommands::moveLeft(){
 }
 
 void MotorCommands::moveForwardRightDiag(){
-    //TODO: set some motors on/off
+    //left_front wheel forward
+    //left_back_wheel OFF
+    //right_Front wheel OFF
+    //right_back wheel forward
+    setStartingSpeed();
+
+    left_front.setDirection(m_forwards);
+    right_back.setDirection(m_forwards);
+
+    left_back.setSpeed(0);
+    right_front.setSpeed(0);
+
+    SetMotorSpeed();
 }
-void MotorCommands::moveForwardleftDiag(){
-    //TODO: set some motors on/off
+void MotorCommands::moveForwardLeftDiag(){
+    //left_front OFF
+    //right_front OFF
+    //left_back OFF
+    //right_BackOFF
+    left_back.setDirection(m_forwards);
+    right_front.setDirection(m_forwards);
+
+    left_front.setSpeed(0);
+    right_back.setSpeed(0);
 }
 
 void MotorCommands::moveBackwardRightDiag(){
-    //TODO: set some motors on/off
+    //opposite of forward left
+    left_back.setDirection(m_forwards);
+    right_front.setDirection(m_forwards);
+
+    left_front.setSpeed(0);
+    right_back.setSpeed(0);
+    
 }
-void MotorCommands::moveBackwardsleftDiag(){
-    //TODO: set some motors on/off
+void MotorCommands::moveBackwardLeftDiag(){
+    //opposite of forward right
+    left_front.setDirection(m_backwards);
+    right_back.setDirection(m_backwards);
+
+    left_back.setSpeed(0);
+    right_front.setSpeed(0);
 }
 
 void MotorCommands::setupArduino(){
@@ -230,11 +258,29 @@ void MotorCommands::loopMotorControl() {
             case static_cast<char>(RobotMovement::MOVE_BACKWARD):
                 this->moveBackward();
                 break;
-            case static_cast<char>(RobotMovement::TURN_LEFT_OPP):
+            case static_cast<char>(RobotMovement::ROTATE_LEFT):
                 this->turnLeft();
                 break;
-            case static_cast<char>(RobotMovement::TURN_RIGHT_OPP):
+            case static_cast<char>(RobotMovement::ROTATE_RIGHT):
                 this->turnRight();
+                break;
+            case static_cast<char>(RobotMovement::MOVE_LEFT):
+                this->moveLeft();
+                break;
+            case static_cast<char>(RobotMovement::MOVE_RIGHT):
+                this->moveRight();
+                break;
+            case static_cast<char>(RobotMovement::DIAG_BACKWARD_LEFT):
+                this->moveBackwardLeftDiag();
+                break;
+            case static_cast<char>(RobotMovement::DIAG_BACKWARD_RIGHT):
+                this->moveBackwardRightDiag();
+                break;
+            case static_cast<char>(RobotMovement::DIAG_FORWARD_LEFT):
+                this->moveForwardLeftDiag();
+                break;
+            case static_cast<char>(RobotMovement::DIAG_FORWARD_RIGHT):
+                this->moveForwardRightDiag();
                 break;
             case static_cast<char>(RobotMovement::SLOWER):
                 this->decreaseSpeed();
