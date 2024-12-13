@@ -22,18 +22,7 @@ The four wheel mecanum wheel can provide omnidirectional movement, by control ea
 
 The robot accepts serial commands to control movement, which are mapped using the following enum class:
 
-enum class RobotMovement: char{
-    STOP = 'x',
-    MOVE_FORWARD = 'w',
-    MOVE_BACKWARD = 's',
-    TURN_LEFT = 'l',
-    TURN_RIGHT = 'r',
-    TURN_LEFT_OPP = 'a',
-    TURN_RIGHT_OPP = 'd',
-    FASTER = '+',
-    SLOWER = '-',
-    INVALID = '?'
-};
+enum class RobotMovement: char{};
 
 * STOP: Halts all motor activity.
 * MOVE_FORWARD / MOVE_BACKWARD: Moves the robot forward or backward.
@@ -57,6 +46,8 @@ Additional commands will be added in future updates.
 # Visual Representiation
 
 ![alt text](image.png)
+
+source: https://www.researchgate.net/figure/Movements-of-a-Mecanum-wheel-driven-robot-to-any-directions-side-arrows-indicate-wheel_fig1_367879750
 
 # Future updates
 Planned improvements:
