@@ -45,7 +45,7 @@ Additional commands will be added in future updates.
 
 # Visual Representiation
 
-![alt text](image.png)
+![alt text](README_IMAGES/MecanumWheelDiagram.png)
 
 source: https://www.researchgate.net/figure/Movements-of-a-Mecanum-wheel-driven-robot-to-any-directions-side-arrows-indicate-wheel_fig1_367879750
 
@@ -58,3 +58,6 @@ Planned improvements:
 
 
 Feel free to explore, modify, and contribute to this project! If you encounter any issues or have suggestions for improvement, open an issue or submit a pull request.
+
+#useful links
+https://www.matec-conferences.org/articles/matecconf/pdf/2021/12/matecconf_mse21_08003.pdf
