@@ -38,18 +38,18 @@ void MotorCommands::setStartingSpeed() {
     }
 }
 
-void MotorCommands::SetSingleMotorDirection(Motor * motor, Direction direction){
+void MotorCommands::setSingleMotorDirection(Motor * motor, Direction direction){
     motor->setDirection(direction);
 }
 
-void MotorCommands::SetTwoMotorDirection(   Motor * motor1, Direction direction1,
+void MotorCommands::setTwoMotorDirection(   Motor * motor1, Direction direction1,
                                             Motor * motor2, Direction direction2){
                                                 
     motor1->setDirection(direction1);
     motor2->setDirection(direction2);
 }
 
-void MotorCommands::SetTwoMotorSpeed(Motor * motor1, Motor * motor2){
+void MotorCommands::setTwoMotorSpeed(Motor * motor1, Motor * motor2){
                                                 
     motor1->setSpeed(m_wheel_speed);
     motor2->setSpeed(m_wheel_speed);
@@ -80,7 +80,7 @@ void MotorCommands::stopMotors() {
     m_left_front.setSpeed(0);
 }
 
-void MotorCommands::SetMotorSpeed(){
+void MotorCommands::setMotorSpeed(){
     m_right_back.setSpeed(m_wheel_speed);
     m_right_front.setSpeed(m_wheel_speed);
 
@@ -92,38 +92,38 @@ void MotorCommands::moveForward() {
 
     setStartingSpeed();
     SetAllMotorDirection(FORWARD, BACKWARD, FORWARD, BACKWARD);
-    SetMotorSpeed();
+    setMotorSpeed();
 }
 
 void MotorCommands::moveBackward() {
     setStartingSpeed();
     SetAllMotorDirection(BACKWARD, FORWARD, BACKWARD, FORWARD);
-    SetMotorSpeed();
+    setMotorSpeed();
 }
 
 void MotorCommands::turnLeft() {
     setStartingSpeed();
     SetAllMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
-    SetMotorSpeed();
+    setMotorSpeed();
 }
 
 void MotorCommands::turnRight() {
     setStartingSpeed();
     SetAllMotorDirection(FORWARD, BACKWARD, BACKWARD, FORWARD);
-    SetMotorSpeed();
+    setMotorSpeed();
 }
 
 void MotorCommands::moveRight(){
     // move lateral right
     setStartingSpeed();
     SetAllMotorDirection(FORWARD, FORWARD, BACKWARD, BACKWARD);
-    SetMotorSpeed();
+    setMotorSpeed();
 }
 
 void MotorCommands::moveLeft(){
     setStartingSpeed();
     SetAllMotorDirection(BACKWARD, BACKWARD, FORWARD, FORWARD);
-    SetMotorSpeed();
+    setMotorSpeed();
 }
 
 void MotorCommands::moveForwardRightDiag(){
@@ -134,8 +134,8 @@ void MotorCommands::moveForwardRightDiag(){
     setStartingSpeed();
     m_left_back.setSpeed(0);
     m_right_front.setSpeed(0);
-    SetTwoMotorDirection(&m_left_front, FORWARD, &m_right_back, BACKWARD);
-    SetTwoMotorSpeed(&m_left_front, &m_right_back);
+    setTwoMotorDirection(&m_left_front, FORWARD, &m_right_back, BACKWARD);
+    setTwoMotorSpeed(&m_left_front, &m_right_back);
 }
 void MotorCommands::moveForwardLeftDiag(){
     //left_front OFF
@@ -145,8 +145,8 @@ void MotorCommands::moveForwardLeftDiag(){
     setStartingSpeed();
     m_left_front.setSpeed(0);
     m_right_back.setSpeed(0);
-    SetTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
-    SetTwoMotorSpeed(&m_left_back, &m_right_front);
+    setTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
+    setTwoMotorSpeed(&m_left_back, &m_right_front);
 
 }
 
@@ -156,8 +156,8 @@ void MotorCommands::moveBackwardRightDiag(){
     m_left_front.setSpeed(0);
     m_right_back.setSpeed(0);
 
-    SetTwoMotorDirection(&m_left_front, BACKWARD, &m_right_back, FORWARD);
-    SetTwoMotorSpeed(&m_left_front, &m_right_back);
+    setTwoMotorDirection(&m_left_front, BACKWARD, &m_right_back, FORWARD);
+    setTwoMotorSpeed(&m_left_front, &m_right_back);
     
 }
 
@@ -167,8 +167,8 @@ void MotorCommands::moveBackwardLeftDiag(){
     m_left_back.setSpeed(0);
     m_right_front.setSpeed(0);
 
-    SetTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
-    SetTwoMotorSpeed(&m_left_back, &m_right_front);
+    setTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
+    setTwoMotorSpeed(&m_left_back, &m_right_front);
 }
 
 void MotorCommands::setupArduino(){
@@ -180,6 +180,46 @@ void MotorCommands::setupArduino(){
 
     Serial.begin(ARDUINO_SERIAL_BAUD_RATE);
 }
+
+// Potential encapsulation of above move functions
+// void MotorCommands::executeMove(RobotMovement direction) {
+//     setStartingSpeed();
+
+//     switch (direction) {
+//     case RobotMovement::MOVE_FORWARD:
+//         SetAllMotorDirection(FORWARD, BACKWARD, FORWARD, BACKWARD);
+//         break;
+//     case RobotMovement::MOVE_BACKWARD:
+//         SetAllMotorDirection(BACKWARD, FORWARD, BACKWARD, FORWARD);
+//         break;
+//     case RobotMovement::ROTATE_LEFT:
+//         SetAllMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
+//         break;
+//     case RobotMovement::ROTATE_RIGHT:
+//         SetAllMotorDirection(FORWARD, BACKWARD, BACKWARD, FORWARD);
+//         break;
+//     case RobotMovement::MOVE_LEFT:
+//         SetAllMotorDirection(FORWARD, FORWARD, BACKWARD, BACKWARD);
+//         break;
+//     case RobotMovement::MOVE_RIGHT:
+//         SetAllMotorDirection(BACKWARD, BACKWARD, FORWARD, FORWARD);
+//         break;
+//     case RobotMovement::DIAG_FORWARD_LEFT:
+//         setTwoMotorDirection(&m_left_front, FORWARD, &m_right_back, BACKWARD);
+//         break;
+//     case RobotMovement::DIAG_FORWARD_RIGHT:
+//         setTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
+//         break;
+//     case RobotMovement::DIAG_BACKWARD_LEFT:
+//         setTwoMotorDirection(&m_left_front, BACKWARD, &m_right_back, FORWARD);
+//         break;
+//     case RobotMovement::DIAG_BACKWARD_RIGHT:
+//         setTwoMotorDirection(&m_left_back, BACKWARD, &m_right_front, FORWARD);
+//         break;
+//     }
+
+//     setMotorSpeeds();
+// }
 
 void MotorCommands::loopMotorControl() {
 

@@ -28,7 +28,7 @@ enum Direction {
  };
 
 enum class SpeedLimit {
-    MIN = 200,
+    MIN = 150,
     MAX = 255
 };
 
@@ -81,18 +81,17 @@ class MotorCommands {
 
         void setupArduino();
 
-        void SetSingleMotorDirection(Motor * motor, Direction direction);
+        void setSingleMotorDirection(Motor * motor, Direction direction);
 
-        void SetTwoMotorSpeed(   Motor * motor1, Motor * motor2);
+        void setTwoMotorSpeed(   Motor * motor1, Motor * motor2);
 
-        void SetTwoMotorDirection(  Motor * motor1, Direction direction1,
+        void setTwoMotorDirection(  Motor * motor1, Direction direction1,
                                     Motor * motor2, Direction direction2);
 
         void SetAllMotorDirection(Direction left_front_wheel_forward, Direction left_back_wheel_forward,
                                 Direction right_front_wheel_forward, Direction right_back_wheel_forward);
 
-        void SetMotorDirTest();
-        void SetMotorSpeed();
+        void setMotorSpeed();
 
         void stopMotors();
 
@@ -112,29 +111,19 @@ class MotorCommands {
         void moveBackwardLeftDiag();
 
         void changeSpeed(bool increase);
-
         void increaseSpeed();
-
         void decreaseSpeed();
-
         void setStartingSpeed();
 
         void loopMotorControl();
 
-        void tester123456IndivudalWheel();
+        void executeMove(RobotMovement direction);
         
     private:
         Motor m_right_back;
         Motor m_right_front;
         Motor m_left_front;
         Motor m_left_back;
-        
-        bool m_forwards = true;
-        bool m_backwards = false;
-
-        //3 inches is diamter -> 0.0762 m D -> 0.0281 for radius
-        double m_wheel_radius = 0.0281;
-        double m_wheel_circum  = 2*PI*m_wheel_radius;
-        double m_wheel_base = 0.16002;
 };
+
 #endif
