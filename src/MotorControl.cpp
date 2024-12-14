@@ -124,7 +124,33 @@ void MotorCommands::moveLeft(){
     setStartingSpeed();
     SetAllMotorDirection(BACKWARD, BACKWARD, FORWARD, FORWARD);
     setMotorSpeed();
+
+    // executeAllWheelMove(RobotMovement::MOVE_LEFT);
 }
+
+// is thiw really better than above
+// in each switch case in the arduino loop, it will have to go through this loop again
+// its a
+// void MotorCommands::executeAllWheelMove(RobotMovement move){
+//     Direction l_Front;
+//     Direction l_back;
+//     Direction r_Front;
+//     Direction r_back;
+//     switch(move){
+//         case RobotMovement::MOVE_FORWARD:
+//             l_Front = FORWARD;
+//             l_back = FORWARD;
+//             r_Front = FORWARD;
+//             r_back = FORWARD;
+//             break;
+//         case RobotMovement::MOVE_BACKWARD:
+//             break;
+//     }
+
+//     setStartingSpeed();
+//     SetAllMotorDirection(l_Front, l_back, r_Front, r_back);
+//     setMotorSpeed();
+// }
 
 void MotorCommands::moveForwardRightDiag(){
     //left_front wheel forward

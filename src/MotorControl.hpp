@@ -117,7 +117,7 @@ class MotorCommands {
 
         void loopMotorControl();
 
-        void executeMove(RobotMovement direction);
+        //void executeAllWheelMove(RobotMovement direction);
         
     private:
         Motor m_right_back;
