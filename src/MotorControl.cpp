@@ -1,11 +1,11 @@
 #include "MotorControl.hpp"
-
 void Motor::setSpeed(int speed) {
     analogWrite(m_pwm_pin, speed);
 }
 
 void Motor::setDirection(bool forward) {
     digitalWrite(m_dir1_pin, forward ? HIGH : LOW);
+    digitalWrite(m_dir2_pin, forward ? LOW : HIGH);
 }
 
 void Motor::pinModeSetup(){
@@ -26,10 +26,10 @@ void MotorCommands::changeSpeed(bool increase) {
     m_wheel_speed = (m_wheel_speed > static_cast<int>(SpeedLimit::MAX)) ? static_cast<int>(SpeedLimit::MAX) : m_wheel_speed;
     m_wheel_speed = (m_wheel_speed < static_cast<int>(SpeedLimit::MIN)) ? static_cast<int>(SpeedLimit::MIN) : m_wheel_speed;
     
-    left_back.setSpeed(m_wheel_speed);
-    left_front.setSpeed(m_wheel_speed);
-    right_back.setSpeed(m_wheel_speed);
-    right_front.setSpeed(m_wheel_speed);
+    m_left_back.setSpeed(m_wheel_speed);
+    m_left_front.setSpeed(m_wheel_speed);
+    m_right_back.setSpeed(m_wheel_speed);
+    m_right_front.setSpeed(m_wheel_speed);
 }
 
 void MotorCommands::setStartingSpeed() {
@@ -38,43 +38,54 @@ void MotorCommands::setStartingSpeed() {
     }
 }
 
-void MotorCommands::SetSingleMotorDirection(Motor motor, Direction direction){
-    motor.setDirection(direction);
+void MotorCommands::SetSingleMotorDirection(Motor * motor, Direction direction){
+    motor->setDirection(direction);
 }
 
-void MotorCommands::SetTwoMotorDirection(   Motor motor1, Direction direction1,
-                                            Motor motor2, Direction direction2){
-    motor1.setDirection(direction1);
-    motor2.setDirection(direction2);
+void MotorCommands::SetTwoMotorDirection(   Motor * motor1, Direction direction1,
+                                            Motor * motor2, Direction direction2){
+                                                
+    motor1->setDirection(direction1);
+    motor2->setDirection(direction2);
+}
+
+void MotorCommands::SetTwoMotorSpeed(Motor * motor1, Motor * motor2){
+                                                
+    motor1->setSpeed(m_wheel_speed);
+    motor2->setSpeed(m_wheel_speed);
 }
 
 
-void MotorCommands::SetAllMotorDirection(Direction left_front_wheel_forward, Direction left_back_wheel_forward,
-                                Direction right_front_wheel_forward, Direction right_back_wheel_forward){
-        right_front.setDirection(right_front_wheel_forward);
-        right_back.setDirection(right_back_wheel_forward);
+void MotorCommands::SetAllMotorDirection(
+                    Direction left_front_wheel_forward, 
+                    Direction left_back_wheel_forward,
+                    Direction right_front_wheel_forward, 
+                    Direction right_back_wheel_forward){
 
-        left_front.setDirection(left_front_wheel_forward);
-        left_back.setDirection(left_back_wheel_forward);
+    m_right_front.setDirection(right_front_wheel_forward);
+    m_right_back.setDirection(right_back_wheel_forward);
+
+    m_left_front.setDirection(left_front_wheel_forward);
+    m_left_back.setDirection(left_back_wheel_forward);
 }
 
 void MotorCommands::stopMotors() {
     Serial.println("stopping motor");
     m_wheel_speed = 0;
     
-    right_back.setSpeed(0);
-    right_front.setSpeed(0);
+    m_right_back.setSpeed(0);
+    m_right_front.setSpeed(0);
 
-    left_back.setSpeed(0);
-    left_front.setSpeed(0);
+    m_left_back.setSpeed(0);
+    m_left_front.setSpeed(0);
 }
 
 void MotorCommands::SetMotorSpeed(){
-    right_back.setSpeed(m_wheel_speed);
-    right_front.setSpeed(m_wheel_speed);
+    m_right_back.setSpeed(m_wheel_speed);
+    m_right_front.setSpeed(m_wheel_speed);
 
-    left_back.setSpeed(m_wheel_speed);
-    left_front.setSpeed(m_wheel_speed);
+    m_left_back.setSpeed(m_wheel_speed);
+    m_left_front.setSpeed(m_wheel_speed);
 }
 
 void MotorCommands::moveForward() {
@@ -92,13 +103,13 @@ void MotorCommands::moveBackward() {
 
 void MotorCommands::turnLeft() {
     setStartingSpeed();
-    SetAllMotorDirection(FORWARD, BACKWARD, BACKWARD, FORWARD);
+    SetAllMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
     SetMotorSpeed();
 }
 
 void MotorCommands::turnRight() {
     setStartingSpeed();
-    SetAllMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
+    SetAllMotorDirection(FORWARD, BACKWARD, BACKWARD, FORWARD);
     SetMotorSpeed();
 }
 
@@ -119,48 +130,53 @@ void MotorCommands::moveForwardRightDiag(){
     //left_front wheel forward
     //left_back_wheel OFF
     //right_Front wheel OFF
-    //right_back wheel forward
+    //right_back wheel "forward" -> back wheel "forards" is backwards
     setStartingSpeed();
-
-    SetTwoMotorDirection(left_front, FORWARD, right_back, FORWARD);
-
-    left_back.setSpeed(0);
-    right_front.setSpeed(0);
-
-    SetMotorSpeed();
+    m_left_back.setSpeed(0);
+    m_right_front.setSpeed(0);
+    SetTwoMotorDirection(&m_left_front, FORWARD, &m_right_back, BACKWARD);
+    SetTwoMotorSpeed(&m_left_front, &m_right_back);
 }
 void MotorCommands::moveForwardLeftDiag(){
     //left_front OFF
     //right_front OFF
     //left_back OFF
-    //right_BackOFF
-    SetTwoMotorDirection(left_back, FORWARD, right_front, FORWARD);
-    left_front.setSpeed(0);
-    right_back.setSpeed(0);
+    //right_Back  OFF
+    setStartingSpeed();
+    m_left_front.setSpeed(0);
+    m_right_back.setSpeed(0);
+    SetTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
+    SetTwoMotorSpeed(&m_left_back, &m_right_front);
+
 }
 
 void MotorCommands::moveBackwardRightDiag(){
     //opposite of forward left
-    SetTwoMotorDirection(left_back, BACKWARD, right_front, BACKWARD);
-    left_front.setSpeed(0);
-    right_back.setSpeed(0);
+    setStartingSpeed();
+    m_left_front.setSpeed(0);
+    m_right_back.setSpeed(0);
+
+    SetTwoMotorDirection(&m_left_front, BACKWARD, &m_right_back, FORWARD);
+    SetTwoMotorSpeed(&m_left_front, &m_right_back);
     
 }
 
 void MotorCommands::moveBackwardLeftDiag(){
     //opposite of forward right
-    SetTwoMotorDirection(left_front, BACKWARD, right_back, BACKWARD);
+    setStartingSpeed();
+    m_left_back.setSpeed(0);
+    m_right_front.setSpeed(0);
 
-    left_back.setSpeed(0);
-    right_front.setSpeed(0);
+    SetTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
+    SetTwoMotorSpeed(&m_left_back, &m_right_front);
 }
 
 void MotorCommands::setupArduino(){
 
-    right_front.pinModeSetup();
-    right_back.pinModeSetup();
-    left_front.pinModeSetup();
-    left_back.pinModeSetup();
+    m_right_front.pinModeSetup();
+    m_right_back.pinModeSetup();
+    m_left_front.pinModeSetup();
+    m_left_back.pinModeSetup();
 
     Serial.begin(ARDUINO_SERIAL_BAUD_RATE);
 }
@@ -169,6 +185,7 @@ void MotorCommands::loopMotorControl() {
 
     if (Serial.available() > 0) {
         char input = Serial.read();
+        Serial.println("You inputed input: " + input);
         //RobotMovement move = RobotMovement::INVALID;
         switch (input) {
             case static_cast<char>(RobotMovement::STOP):
@@ -215,9 +232,20 @@ void MotorCommands::loopMotorControl() {
                 break;
         }
     }
-    //do not want to overload CPU
-    delay(1000);
-    // this->getMotorData();
+    // do not want to overload CPU
+    delay(500);
+
+
+    // left_front.setDirection(FORWARD); // Forward
+    // left_front.setSpeed(128);      // Half speed
+    // delay(2000);
+
+    // left_front.setDirection(BACKWARD); // Backward
+    // left_front.setSpeed(128);
+    // delay(2000);
+
+    // left_front.setSpeed(0);         // Stop
+    // delay(2000);
 }
 
 

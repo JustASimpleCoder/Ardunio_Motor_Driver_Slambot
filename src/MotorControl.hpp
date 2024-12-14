@@ -28,7 +28,7 @@ enum Direction {
  };
 
 enum class SpeedLimit {
-    MIN = 125,
+    MIN = 200,
     MAX = 255
 };
 
@@ -63,15 +63,16 @@ class Motor{
         void pinModeSetup();
 };
 
+
 class MotorCommands {
     public:
         unsigned int m_wheel_speed;
         MotorCommands()
             :   m_wheel_speed(0),
-                right_back(6, 4, 7), 
-                right_front(5,2,3),
-                left_front(9,11,8), 
-                left_back(10,13,12)
+                m_right_back(5,2,3), 
+                m_right_front(6,4,7),
+                m_left_front(9,11,8), 
+                m_left_back(10,13,12)
                 {}
         
         ~MotorCommands(){
@@ -80,10 +81,12 @@ class MotorCommands {
 
         void setupArduino();
 
-        void SetSingleMotorDirection(Motor motor, Direction direction);
+        void SetSingleMotorDirection(Motor * motor, Direction direction);
 
-        void SetTwoMotorDirection(  Motor motor1, Direction direction1,
-                                    Motor motor2, Direction direction2);
+        void SetTwoMotorSpeed(   Motor * motor1, Motor * motor2);
+
+        void SetTwoMotorDirection(  Motor * motor1, Direction direction1,
+                                    Motor * motor2, Direction direction2);
 
         void SetAllMotorDirection(Direction left_front_wheel_forward, Direction left_back_wheel_forward,
                                 Direction right_front_wheel_forward, Direction right_back_wheel_forward);
@@ -117,12 +120,14 @@ class MotorCommands {
         void setStartingSpeed();
 
         void loopMotorControl();
+
+        void tester123456IndivudalWheel();
         
     private:
-        Motor right_back;
-        Motor right_front;
-        Motor left_front;
-        Motor left_back;
+        Motor m_right_back;
+        Motor m_right_front;
+        Motor m_left_front;
+        Motor m_left_back;
         
         bool m_forwards = true;
         bool m_backwards = false;
