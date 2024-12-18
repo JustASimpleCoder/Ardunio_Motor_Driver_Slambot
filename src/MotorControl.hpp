@@ -32,6 +32,31 @@ enum class SpeedLimit {
     MAX = 255
 };
 
+template <typename T>
+inline bool operator>(T a, SpeedLimit b) {
+    return a > static_cast<int>(b);
+}
+
+template <typename T>
+inline bool operator<(T a, SpeedLimit b) {
+    return a < static_cast<int>(b);
+}
+
+template <typename T>
+inline bool operator==(T a, SpeedLimit b) {
+    return a == static_cast<int>(b);
+}
+
+template <typename T>
+inline bool operator>=(T a, SpeedLimit b) {
+    return a >= static_cast<int>(b);
+}
+
+template <typename T>
+inline bool operator<=(T a, SpeedLimit b) {
+    return a <= static_cast<int>(b);
+}
+
 enum class RobotMovement: char{
     STOP = 'x',
     MOVE_FORWARD = 'w',
@@ -55,9 +80,8 @@ class Motor{
         int m_dir1_pin;
         int m_dir2_pin;
     public:
-        Motor(int pwm, int dir1, int dir2)
-            : m_pwm_pin(pwm), m_dir1_pin(dir1), m_dir2_pin(dir2) {}
-
+        Motor(int pwm, int dir1, int dir2);
+        
         void setSpeed(int speed);
         void setDirection(bool forward);
         void pinModeSetup();
@@ -66,60 +90,49 @@ class Motor{
 
 class MotorCommands {
     public:
-        unsigned int m_wheel_speed;
-        MotorCommands()
-            :   m_wheel_speed(0),
-                m_right_back(5,2,3), 
-                m_right_front(6,4,7),
-                m_left_front(9,11,8), 
-                m_left_back(10,13,12)
-                {}
         
+
+        MotorCommands();
         ~MotorCommands(){
             //stopMotors();
         }
 
         void setupArduino();
+        void loopMotorControl();
 
         void setSingleMotorDirection(Motor * motor, Direction direction);
-
-        void setTwoMotorSpeed(   Motor * motor1, Motor * motor2);
-
+        void setTwoMotorSpeed(Motor * motor1, Motor * motor2);
         void setTwoMotorDirection(  Motor * motor1, Direction direction1,
                                     Motor * motor2, Direction direction2);
-
-        void SetAllMotorDirection(Direction left_front_wheel_forward, Direction left_back_wheel_forward,
-                                Direction right_front_wheel_forward, Direction right_back_wheel_forward);
-
-        void setMotorSpeed();
-
-        void stopMotors();
-
+        void SetAllMotorDirection(  Direction left_front_wheel_forward, 
+                                    Direction left_back_wheel_forward,
+                                    Direction right_front_wheel_forward, 
+                                    Direction right_back_wheel_forward);
         void moveForward();
         void moveBackward();
-
-        void turnLeft();
-        void turnRight();
-
         void moveRight();
         void moveLeft();
 
         void moveForwardRightDiag();
         void moveForwardLeftDiag();
-
         void moveBackwardRightDiag();
         void moveBackwardLeftDiag();
 
+        void turnLeft();
+        void turnRight();
+
+
+        void setMotorSpeed();
+        void stopMotors();
         void changeSpeed(bool increase);
         void increaseSpeed();
         void decreaseSpeed();
         void setStartingSpeed();
-
-        void loopMotorControl();
-
         //void executeAllWheelMove(RobotMovement direction);
         
     private:
+        unsigned int m_wheel_speed;
+        
         Motor m_right_back;
         Motor m_right_front;
         Motor m_left_front;

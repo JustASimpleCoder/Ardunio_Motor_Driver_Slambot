@@ -1,4 +1,7 @@
 #include "MotorControl.hpp"
+Motor::Motor(int pwm, int dir1, int dir2)
+            : m_pwm_pin(pwm), m_dir1_pin(dir1), m_dir2_pin(dir2) {};
+
 void Motor::setSpeed(int speed) {
     analogWrite(m_pwm_pin, speed);
 }
@@ -9,10 +12,18 @@ void Motor::setDirection(bool forward) {
 }
 
 void Motor::pinModeSetup(){
-    pinMode(this->m_pwm_pin, OUTPUT);
-    pinMode(this->m_dir1_pin, OUTPUT);
-    pinMode(this->m_dir2_pin, OUTPUT);
+    pinMode(m_pwm_pin, OUTPUT);
+    pinMode(m_dir1_pin, OUTPUT);
+    pinMode(m_dir2_pin, OUTPUT);
 }
+
+MotorCommands::MotorCommands()
+                :   m_wheel_speed(0),
+                m_right_back(5,2,3), 
+                m_right_front(6,4,7),
+                m_left_front(9,11,8), 
+                m_left_back(10,13,12)
+                {};
 
 void MotorCommands::increaseSpeed() {
    changeSpeed(true);
@@ -23,8 +34,8 @@ void MotorCommands::decreaseSpeed() {
 
 void MotorCommands::changeSpeed(bool increase) {
     m_wheel_speed += (increase) ?  SPEED_INCREASE_STEP : -SPEED_INCREASE_STEP;
-    m_wheel_speed = (m_wheel_speed > static_cast<int>(SpeedLimit::MAX)) ? static_cast<int>(SpeedLimit::MAX) : m_wheel_speed;
-    m_wheel_speed = (m_wheel_speed < static_cast<int>(SpeedLimit::MIN)) ? static_cast<int>(SpeedLimit::MIN) : m_wheel_speed;
+    m_wheel_speed = (m_wheel_speed > SpeedLimit::MAX) ? static_cast<int>(SpeedLimit::MAX) : m_wheel_speed;
+    m_wheel_speed = (m_wheel_speed < SpeedLimit::MIN) ? static_cast<int>(SpeedLimit::MIN) : m_wheel_speed;
     
     m_left_back.setSpeed(m_wheel_speed);
     m_left_front.setSpeed(m_wheel_speed);
@@ -251,47 +262,45 @@ void MotorCommands::loopMotorControl() {
 
     if (Serial.available() > 0) {
         char input = Serial.read();
-        Serial.println("You inputed input: " + input);
-        //RobotMovement move = RobotMovement::INVALID;
         switch (input) {
             case static_cast<char>(RobotMovement::STOP):
-                this->stopMotors();
+                stopMotors();
                 break;
             case static_cast<char>(RobotMovement::MOVE_FORWARD):
-                this->moveForward();
+                moveForward();
                 break;
             case static_cast<char>(RobotMovement::MOVE_BACKWARD):
-                this->moveBackward();
+                moveBackward();
                 break;
             case static_cast<char>(RobotMovement::ROTATE_LEFT):
-                this->turnLeft();
+                turnLeft();
                 break;
             case static_cast<char>(RobotMovement::ROTATE_RIGHT):
-                this->turnRight();
+                turnRight();
                 break;
             case static_cast<char>(RobotMovement::MOVE_LEFT):
-                this->moveLeft();
+                moveLeft();
                 break;
             case static_cast<char>(RobotMovement::MOVE_RIGHT):
-                this->moveRight();
+                moveRight();
                 break;
             case static_cast<char>(RobotMovement::DIAG_BACKWARD_LEFT):
-                this->moveBackwardLeftDiag();
+                moveBackwardLeftDiag();
                 break;
             case static_cast<char>(RobotMovement::DIAG_BACKWARD_RIGHT):
-                this->moveBackwardRightDiag();
+                moveBackwardRightDiag();
                 break;
             case static_cast<char>(RobotMovement::DIAG_FORWARD_LEFT):
-                this->moveForwardLeftDiag();
+                moveForwardLeftDiag();
                 break;
             case static_cast<char>(RobotMovement::DIAG_FORWARD_RIGHT):
-                this->moveForwardRightDiag();
+                moveForwardRightDiag();
                 break;
             case static_cast<char>(RobotMovement::SLOWER):
-                this->decreaseSpeed();
+                decreaseSpeed();
                 break;
             case static_cast<char>(RobotMovement::FASTER):
-                this->increaseSpeed();
+                increaseSpeed();
                 break;
             default: 
                 //fall through for now, but may auto decrease speed so you must hold down button
