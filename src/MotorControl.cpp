@@ -34,8 +34,8 @@ void MotorCommands::decreaseSpeed() {
 
 void MotorCommands::changeSpeed(bool increase) {
     m_wheel_speed += (increase) ?  SPEED_INCREASE_STEP : -SPEED_INCREASE_STEP;
-    m_wheel_speed = (m_wheel_speed > SpeedLimit::MAX) ? static_cast<int>(SpeedLimit::MAX) : m_wheel_speed;
-    m_wheel_speed = (m_wheel_speed < SpeedLimit::MIN) ? static_cast<int>(SpeedLimit::MIN) : m_wheel_speed;
+    m_wheel_speed = (m_wheel_speed > SPEED_LIMIT_MAX) ? SPEED_LIMIT_MAX : m_wheel_speed;
+    m_wheel_speed = (m_wheel_speed < SPEED_LIMIT_MIN) ? SPEED_LIMIT_MIN : m_wheel_speed;
     
     m_left_back.setSpeed(m_wheel_speed);
     m_left_front.setSpeed(m_wheel_speed);
@@ -45,25 +45,25 @@ void MotorCommands::changeSpeed(bool increase) {
 
 void MotorCommands::setStartingSpeed() {
     if (m_wheel_speed == 0){
-        m_wheel_speed = static_cast<int>(SpeedLimit::MIN);
+        m_wheel_speed = SPEED_LIMIT_MIN; //static_cast<int>(SpeedLimit::MIN);
     }
 }
 
-void MotorCommands::setSingleMotorDirection(Motor * motor, Direction direction){
-    motor->setDirection(direction);
+void MotorCommands::setSingleMotorDirection(Motor& motor, Direction direction){
+    motor.setDirection(direction);
 }
 
-void MotorCommands::setTwoMotorDirection(   Motor * motor1, Direction direction1,
-                                            Motor * motor2, Direction direction2){
+void MotorCommands::setTwoMotorDirection(   Motor& motor1, Direction direction1,
+                                            Motor& motor2, Direction direction2){
                                                 
-    motor1->setDirection(direction1);
-    motor2->setDirection(direction2);
+    motor1.setDirection(direction1);
+    motor2.setDirection(direction2);
 }
 
-void MotorCommands::setTwoMotorSpeed(Motor * motor1, Motor * motor2){
+void MotorCommands::setTwoMotorSpeed(Motor& motor1, Motor& motor2){
                                                 
-    motor1->setSpeed(m_wheel_speed);
-    motor2->setSpeed(m_wheel_speed);
+    motor1.setSpeed(m_wheel_speed);
+    motor2.setSpeed(m_wheel_speed);
 }
 
 
@@ -72,12 +72,15 @@ void MotorCommands::SetAllMotorDirection(
                     Direction left_back_wheel_forward,
                     Direction right_front_wheel_forward, 
                     Direction right_back_wheel_forward){
-
+    
+    // motor wont start turning until pwm signal is approx ~120 - 150
+    setStartingSpeed();
     m_right_front.setDirection(right_front_wheel_forward);
     m_right_back.setDirection(right_back_wheel_forward);
 
     m_left_front.setDirection(left_front_wheel_forward);
     m_left_back.setDirection(left_back_wheel_forward);
+    setMotorSpeed();
 }
 
 void MotorCommands::stopMotors() {
@@ -100,90 +103,50 @@ void MotorCommands::setMotorSpeed(){
 }
 
 void MotorCommands::moveForward() {
-
-    setStartingSpeed();
     SetAllMotorDirection(FORWARD, BACKWARD, FORWARD, BACKWARD);
-    setMotorSpeed();
 }
 
 void MotorCommands::moveBackward() {
-    setStartingSpeed();
     SetAllMotorDirection(BACKWARD, FORWARD, BACKWARD, FORWARD);
-    setMotorSpeed();
 }
 
 void MotorCommands::turnLeft() {
-    setStartingSpeed();
     SetAllMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
-    setMotorSpeed();
 }
 
 void MotorCommands::turnRight() {
-    setStartingSpeed();
     SetAllMotorDirection(FORWARD, BACKWARD, BACKWARD, FORWARD);
-    setMotorSpeed();
 }
 
 void MotorCommands::moveRight(){
     // move lateral right
-    setStartingSpeed();
     SetAllMotorDirection(FORWARD, FORWARD, BACKWARD, BACKWARD);
-    setMotorSpeed();
 }
 
 void MotorCommands::moveLeft(){
-    setStartingSpeed();
     SetAllMotorDirection(BACKWARD, BACKWARD, FORWARD, FORWARD);
-    setMotorSpeed();
-
-    // executeAllWheelMove(RobotMovement::MOVE_LEFT);
 }
-
-// is thiw really better than above
-// in each switch case in the arduino loop, it will have to go through this loop again
-// its a
-// void MotorCommands::executeAllWheelMove(RobotMovement move){
-//     Direction l_Front;
-//     Direction l_back;
-//     Direction r_Front;
-//     Direction r_back;
-//     switch(move){
-//         case RobotMovement::MOVE_FORWARD:
-//             l_Front = FORWARD;
-//             l_back = FORWARD;
-//             r_Front = FORWARD;
-//             r_back = FORWARD;
-//             break;
-//         case RobotMovement::MOVE_BACKWARD:
-//             break;
-//     }
-
-//     setStartingSpeed();
-//     SetAllMotorDirection(l_Front, l_back, r_Front, r_back);
-//     setMotorSpeed();
-// }
-
 void MotorCommands::moveForwardRightDiag(){
     //left_front wheel forward
     //left_back_wheel OFF
     //right_Front wheel OFF
-    //right_back wheel "forward" -> back wheel "forards" is backwards
+    //right_back wheel "forward" -> back wheel "forwards" is backwards
     setStartingSpeed();
     m_left_back.setSpeed(0);
     m_right_front.setSpeed(0);
-    setTwoMotorDirection(&m_left_front, FORWARD, &m_right_back, BACKWARD);
-    setTwoMotorSpeed(&m_left_front, &m_right_back);
+    setTwoMotorDirection(m_left_front, FORWARD, m_right_back, BACKWARD);
+    setTwoMotorSpeed(m_left_front, m_right_back);
 }
 void MotorCommands::moveForwardLeftDiag(){
-    //left_front OFF
-    //right_front OFF
-    //left_back OFF
-    //right_Back  OFF
+    //left_front wheel OFF
+    //right_front wheel Forward
+    //left_back wheel "forward" -> back wheel "forwards" is backwards
+    //right_Back  wheel OFF 
     setStartingSpeed();
     m_left_front.setSpeed(0);
     m_right_back.setSpeed(0);
-    setTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
-    setTwoMotorSpeed(&m_left_back, &m_right_front);
+    setTwoMotorDirection(m_left_back, FORWARD, m_right_front, BACKWARD);
+    setTwoMotorSpeed(m_left_back, m_right_front);
 
 }
 
@@ -193,8 +156,8 @@ void MotorCommands::moveBackwardRightDiag(){
     m_left_front.setSpeed(0);
     m_right_back.setSpeed(0);
 
-    setTwoMotorDirection(&m_left_front, BACKWARD, &m_right_back, FORWARD);
-    setTwoMotorSpeed(&m_left_front, &m_right_back);
+    setTwoMotorDirection(m_left_front, BACKWARD, m_right_back, FORWARD);
+    setTwoMotorSpeed(m_left_front, m_right_back);
     
 }
 
@@ -204,8 +167,8 @@ void MotorCommands::moveBackwardLeftDiag(){
     m_left_back.setSpeed(0);
     m_right_front.setSpeed(0);
 
-    setTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
-    setTwoMotorSpeed(&m_left_back, &m_right_front);
+    setTwoMotorDirection(m_left_back, FORWARD, m_right_front, BACKWARD);
+    setTwoMotorSpeed(m_left_back, m_right_front);
 }
 
 void MotorCommands::setupArduino(){
@@ -307,20 +270,8 @@ void MotorCommands::loopMotorControl() {
                 break;
         }
     }
-    // do not want to overload CPU
+    // do not want to overload CPU and ensure all motor code finishes beofre next character check
     delay(500);
-
-
-    // left_front.setDirection(FORWARD); // Forward
-    // left_front.setSpeed(128);      // Half speed
-    // delay(2000);
-
-    // left_front.setDirection(BACKWARD); // Backward
-    // left_front.setSpeed(128);
-    // delay(2000);
-
-    // left_front.setSpeed(0);         // Stop
-    // delay(2000);
 }
 
 

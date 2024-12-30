@@ -9,6 +9,8 @@
 # define PI 3.14159265358979323846
 # define ARDUINO_SERIAL_BAUD_RATE 9600
 # define SPEED_INCREASE_STEP 5
+# define SPEED_LIMIT_MIN 150
+# define SPEED_LIMIT_MAX 255
 
 #include "Arduino.h"
 
@@ -34,27 +36,27 @@ enum class SpeedLimit {
 
 template <typename T>
 inline bool operator>(T a, SpeedLimit b) {
-    return a > static_cast<int>(b);
+    return static_cast<int>(a) > static_cast<int>(b);
 }
 
 template <typename T>
 inline bool operator<(T a, SpeedLimit b) {
-    return a < static_cast<int>(b);
+    return static_cast<int>(a) < static_cast<int>(b);
 }
 
 template <typename T>
 inline bool operator==(T a, SpeedLimit b) {
-    return a == static_cast<int>(b);
+    return static_cast<int>(a) == static_cast<int>(b);
 }
 
 template <typename T>
 inline bool operator>=(T a, SpeedLimit b) {
-    return a >= static_cast<int>(b);
+    return static_cast<int>(a) >= static_cast<int>(b);
 }
 
 template <typename T>
 inline bool operator<=(T a, SpeedLimit b) {
-    return a <= static_cast<int>(b);
+    return static_cast<int>(a) <= static_cast<int>(b);
 }
 
 enum class RobotMovement: char{
@@ -73,6 +75,12 @@ enum class RobotMovement: char{
     SLOWER = '-',
     INVALID = '?'
 };
+
+
+inline bool operator==(int a, RobotMovement b) {
+    return a == static_cast<char>(b);
+}
+
 
 class Motor{
     private:
@@ -100,10 +108,11 @@ class MotorCommands {
         void setupArduino();
         void loopMotorControl();
 
-        void setSingleMotorDirection(Motor * motor, Direction direction);
-        void setTwoMotorSpeed(Motor * motor1, Motor * motor2);
-        void setTwoMotorDirection(  Motor * motor1, Direction direction1,
-                                    Motor * motor2, Direction direction2);
+        void setSingleMotorDirection(Motor &motor, Direction direction);
+        void setTwoMotorSpeed(Motor& motor1, Motor& motor2);
+        void setTwoMotorDirection(  Motor& motor1, Direction direction1,
+                                    Motor& motor2, Direction direction2);
+
         void SetAllMotorDirection(  Direction left_front_wheel_forward, 
                                     Direction left_back_wheel_forward,
                                     Direction right_front_wheel_forward, 
@@ -121,7 +130,6 @@ class MotorCommands {
         void turnLeft();
         void turnRight();
 
-
         void setMotorSpeed();
         void stopMotors();
         void changeSpeed(bool increase);
@@ -132,7 +140,7 @@ class MotorCommands {
         
     private:
         unsigned int m_wheel_speed;
-        
+
         Motor m_right_back;
         Motor m_right_front;
         Motor m_left_front;
