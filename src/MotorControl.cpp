@@ -1,21 +1,4 @@
 #include "MotorControl.hpp"
-Motor::Motor(int pwm, int dir1, int dir2)
-            : m_pwm_pin(pwm), m_dir1_pin(dir1), m_dir2_pin(dir2) {};
-
-void Motor::setSpeed(int speed) {
-    analogWrite(m_pwm_pin, speed);
-}
-
-void Motor::setDirection(bool forward) {
-    digitalWrite(m_dir1_pin, forward ? HIGH : LOW);
-    digitalWrite(m_dir2_pin, forward ? LOW : HIGH);
-}
-
-void Motor::pinModeSetup(){
-    pinMode(m_pwm_pin, OUTPUT);
-    pinMode(m_dir1_pin, OUTPUT);
-    pinMode(m_dir2_pin, OUTPUT);
-}
 
 MotorCommands::MotorCommands()
                 :   m_wheel_speed(0),
@@ -49,12 +32,12 @@ void MotorCommands::setStartingSpeed() {
     }
 }
 
-void MotorCommands::setSingleMotorDirection(Motor& motor, Direction direction){
+void MotorCommands::setSingleMotorDirection(Motor& motor, const Direction& direction){
     motor.setDirection(direction);
 }
 
-void MotorCommands::setTwoMotorDirection(   Motor& motor1, Direction direction1,
-                                            Motor& motor2, Direction direction2){
+void MotorCommands::setTwoMotorDirection(   Motor& motor1, const Direction& direction1,
+                                            Motor& motor2, const Direction& direction2){
                                                 
     motor1.setDirection(direction1);
     motor2.setDirection(direction2);
@@ -68,10 +51,10 @@ void MotorCommands::setTwoMotorSpeed(Motor& motor1, Motor& motor2){
 
 
 void MotorCommands::SetAllMotorDirection(
-                    Direction left_front_wheel_forward, 
-                    Direction left_back_wheel_forward,
-                    Direction right_front_wheel_forward, 
-                    Direction right_back_wheel_forward){
+                    const Direction& left_front_wheel_forward, 
+                    const Direction& left_back_wheel_forward,
+                    const Direction& right_front_wheel_forward, 
+                    const Direction& right_back_wheel_forward){
     
     // motor wont start turning until pwm signal is approx ~120 - 150
     setStartingSpeed();
@@ -84,7 +67,7 @@ void MotorCommands::SetAllMotorDirection(
 }
 
 void MotorCommands::stopMotors() {
-    Serial.println("stopping motor");
+    //Serial.println("stopping motor");
     m_wheel_speed = 0;
     
     m_right_back.setSpeed(0);
@@ -181,46 +164,6 @@ void MotorCommands::setupArduino(){
     Serial.begin(ARDUINO_SERIAL_BAUD_RATE);
 }
 
-// Potential encapsulation of above move functions
-// void MotorCommands::executeMove(RobotMovement direction) {
-//     setStartingSpeed();
-
-//     switch (direction) {
-//     case RobotMovement::MOVE_FORWARD:
-//         SetAllMotorDirection(FORWARD, BACKWARD, FORWARD, BACKWARD);
-//         break;
-//     case RobotMovement::MOVE_BACKWARD:
-//         SetAllMotorDirection(BACKWARD, FORWARD, BACKWARD, FORWARD);
-//         break;
-//     case RobotMovement::ROTATE_LEFT:
-//         SetAllMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
-//         break;
-//     case RobotMovement::ROTATE_RIGHT:
-//         SetAllMotorDirection(FORWARD, BACKWARD, BACKWARD, FORWARD);
-//         break;
-//     case RobotMovement::MOVE_LEFT:
-//         SetAllMotorDirection(FORWARD, FORWARD, BACKWARD, BACKWARD);
-//         break;
-//     case RobotMovement::MOVE_RIGHT:
-//         SetAllMotorDirection(BACKWARD, BACKWARD, FORWARD, FORWARD);
-//         break;
-//     case RobotMovement::DIAG_FORWARD_LEFT:
-//         setTwoMotorDirection(&m_left_front, FORWARD, &m_right_back, BACKWARD);
-//         break;
-//     case RobotMovement::DIAG_FORWARD_RIGHT:
-//         setTwoMotorDirection(&m_left_back, FORWARD, &m_right_front, BACKWARD);
-//         break;
-//     case RobotMovement::DIAG_BACKWARD_LEFT:
-//         setTwoMotorDirection(&m_left_front, BACKWARD, &m_right_back, FORWARD);
-//         break;
-//     case RobotMovement::DIAG_BACKWARD_RIGHT:
-//         setTwoMotorDirection(&m_left_back, BACKWARD, &m_right_front, FORWARD);
-//         break;
-//     }
-
-//     setMotorSpeeds();
-// }
-
 void MotorCommands::loopMotorControl() {
 
     if (Serial.available() > 0) {
@@ -271,7 +214,7 @@ void MotorCommands::loopMotorControl() {
         }
     }
     // do not want to overload CPU and ensure all motor code finishes beofre next character check
-    delay(500);
+    //delay(50);
 }
 
 
