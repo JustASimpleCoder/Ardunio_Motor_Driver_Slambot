@@ -1,4 +1,4 @@
-#include "L298NMotor.hpp";
+#include "L298NMotor.hpp"
 
 Motor::Motor(int pwm, int dir1, int dir2)
             : m_pwm_pin(pwm), m_dir1_pin(dir1), m_dir2_pin(dir2) {};

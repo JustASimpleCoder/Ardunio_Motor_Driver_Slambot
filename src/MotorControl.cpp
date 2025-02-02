@@ -11,6 +11,7 @@ MotorCommands::MotorCommands()
 void MotorCommands::increaseSpeed() {
    changeSpeed(true);
 }
+
 void MotorCommands::decreaseSpeed() {
    changeSpeed(false);
 }

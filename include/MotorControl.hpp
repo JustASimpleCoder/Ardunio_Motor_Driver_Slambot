@@ -49,10 +49,9 @@ class MotorCommands {
         void loopMotorControl();
 
         void setSingleMotorDirection(Motor &motor, const Direction& direction);
-        void setTwoMotorSpeed(Motor& motor1, Motor& motor2);
+        void setTwoMotorSpeed(      Motor& motor1, Motor& motor2);
         void setTwoMotorDirection(  Motor& motor1, const Direction& direction1,
                                     Motor& motor2, const Direction& direction2);
-
         void SetAllMotorDirection(  const Direction& left_front_wheel_forward, 
                                     const Direction& left_back_wheel_forward,
                                     const Direction& right_front_wheel_forward, 
@@ -69,9 +68,9 @@ class MotorCommands {
 
         void turnLeft();
         void turnRight();
-
-        void setMotorSpeed();
+        
         void stopMotors();
+        void setMotorSpeed();
         void changeSpeed(bool increase);
         void increaseSpeed();
         void decreaseSpeed();

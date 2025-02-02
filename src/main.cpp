@@ -1,6 +1,4 @@
 #include "MotorControl.hpp"
-
-// put function declarations here:
 MotorCommands commands;
 
 void setup() {
