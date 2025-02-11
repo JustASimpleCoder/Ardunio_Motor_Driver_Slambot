@@ -12,6 +12,24 @@
 # define SPEED_LIMIT_MIN 150
 # define SPEED_LIMIT_MAX 255
 
+# define PIN_RB_PWM 5
+# define PIN_RB_DIR_1 2
+# define PIN_RB_DIR_2 3
+
+# define PIN_RF_PWM 6
+# define PIN_RF_DIR_1 4
+# define PIN_RF_DIR_2 7
+
+# define PIN_LB_PWM 9
+# define PIN_LB_DIR_1 11
+# define PIN_LB_DIR_2 8
+
+# define PIN_LF_PWM 10
+# define PIN_LF_DIR_1 13
+# define PIN_LF_DIR_2 12
+
+
+
 #include "Arduino.h"
 #include "L298NMotor.hpp"
 

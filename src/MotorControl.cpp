@@ -2,10 +2,10 @@
 
 MotorCommands::MotorCommands()
                 :   m_wheel_speed(0),
-                m_right_back(5,2,3), 
-                m_right_front(6,4,7),
-                m_left_front(9,11,8), 
-                m_left_back(10,13,12)
+                    m_right_back(PIN_RB_PWM, PIN_RB_DIR_1, PIN_RB_DIR_2), 
+                    m_right_front(PIN_RF_PWM, PIN_RF_DIR_1, PIN_RF_DIR_2),
+                    m_left_front(PIN_LB_PWM, PIN_LB_DIR_1, PIN_LB_DIR_2), 
+                    m_left_back(PIN_LF_PWM, PIN_LF_DIR_1,PIN_LF_DIR_2)
                 {};
 
 void MotorCommands::increaseSpeed() {
@@ -17,14 +17,9 @@ void MotorCommands::decreaseSpeed() {
 }
 
 void MotorCommands::changeSpeed(bool increase) {
-    m_wheel_speed += (increase) ?  SPEED_INCREASE_STEP : -SPEED_INCREASE_STEP;
-    m_wheel_speed = (m_wheel_speed > SPEED_LIMIT_MAX) ? SPEED_LIMIT_MAX : m_wheel_speed;
-    m_wheel_speed = (m_wheel_speed < SPEED_LIMIT_MIN) ? SPEED_LIMIT_MIN : m_wheel_speed;
-    
-    m_left_back.setSpeed(m_wheel_speed);
-    m_left_front.setSpeed(m_wheel_speed);
-    m_right_back.setSpeed(m_wheel_speed);
-    m_right_front.setSpeed(m_wheel_speed);
+    m_wheel_speed += (increase) ?  SPEED_INCREASE_STEP : -SPEED_INCREASE_STEP;   
+    m_wheel_speed = constrain(m_wheel_speed, SPEED_LIMIT_MIN, SPEED_LIMIT_MAX);
+    setMotorSpeed();
 }
 
 void MotorCommands::setStartingSpeed() {
@@ -38,14 +33,12 @@ void MotorCommands::setSingleMotorDirection(Motor& motor, const Direction& direc
 }
 
 void MotorCommands::setTwoMotorDirection(   Motor& motor1, const Direction& direction1,
-                                            Motor& motor2, const Direction& direction2){
-                                                
+                                            Motor& motor2, const Direction& direction2){                                            
     motor1.setDirection(direction1);
     motor2.setDirection(direction2);
 }
 
-void MotorCommands::setTwoMotorSpeed(Motor& motor1, Motor& motor2){
-                                                
+void MotorCommands::setTwoMotorSpeed(Motor& motor1, Motor& motor2){                    
     motor1.setSpeed(m_wheel_speed);
     motor2.setSpeed(m_wheel_speed);
 }
@@ -56,7 +49,6 @@ void MotorCommands::SetAllMotorDirection(
                     const Direction& left_back_wheel_forward,
                     const Direction& right_front_wheel_forward, 
                     const Direction& right_back_wheel_forward){
-    
     // motor wont start turning until pwm signal is approx ~120 - 150
     setStartingSpeed();
     m_right_front.setDirection(right_front_wheel_forward);
