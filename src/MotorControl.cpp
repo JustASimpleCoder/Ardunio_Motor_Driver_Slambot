@@ -1,5 +1,6 @@
 #include "MotorControl.hpp"
 
+
 MotorCommands::MotorCommands()
                 :   m_wheel_speed(0),
                     m_right_back(PIN_RB_PWM, PIN_RB_DIR_1, PIN_RB_DIR_2), 
@@ -69,6 +70,10 @@ void MotorCommands::stopMotors() {
     m_left_back.setSpeed(0);
     m_left_front.setSpeed(0);
 }
+void MotorCommands::stopTwoMotor(Motor & motor1, Motor & motor2){
+    motor1.setSpeed(0);
+    motor2.setSpeed(0);
+}
 
 void MotorCommands::setMotorSpeed(){
     m_right_back.setSpeed(m_wheel_speed);
@@ -108,8 +113,9 @@ void MotorCommands::moveForwardRightDiag(){
     //right_Front wheel OFF
     //right_back wheel "forward" -> back wheel "forwards" is backwards
     setStartingSpeed();
-    m_left_back.setSpeed(0);
-    m_right_front.setSpeed(0);
+    // m_left_back.setSpeed(0);
+    // m_right_front.setSpeed(0);
+    stopTwoMotor(m_left_back, m_right_front);
     setTwoMotorDirection(m_left_front, FORWARD, m_right_back, BACKWARD);
     setTwoMotorSpeed(m_left_front, m_right_back);
 }
@@ -119,8 +125,9 @@ void MotorCommands::moveForwardLeftDiag(){
     //left_back wheel "forward" -> back wheel "forwards" is backwards
     //right_Back  wheel OFF 
     setStartingSpeed();
-    m_left_front.setSpeed(0);
-    m_right_back.setSpeed(0);
+    // m_left_front.setSpeed(0);
+    // m_right_back.setSpeed(0);
+    stopTwoMotor(m_left_front, m_right_back);
     setTwoMotorDirection(m_left_back, FORWARD, m_right_front, BACKWARD);
     setTwoMotorSpeed(m_left_back, m_right_front);
 
@@ -129,9 +136,9 @@ void MotorCommands::moveForwardLeftDiag(){
 void MotorCommands::moveBackwardRightDiag(){
     //opposite of forward left
     setStartingSpeed();
-    m_left_front.setSpeed(0);
-    m_right_back.setSpeed(0);
-
+    // m_left_front.setSpeed(0);
+    // m_right_back.setSpeed(0);
+    stopTwoMotor(m_left_back, m_right_back);
     setTwoMotorDirection(m_left_front, BACKWARD, m_right_back, FORWARD);
     setTwoMotorSpeed(m_left_front, m_right_back);
     
@@ -140,9 +147,9 @@ void MotorCommands::moveBackwardRightDiag(){
 void MotorCommands::moveBackwardLeftDiag(){
     //opposite of forward right
     setStartingSpeed();
-    m_left_back.setSpeed(0);
-    m_right_front.setSpeed(0);
-
+    // m_left_back.setSpeed(0);
+    // m_right_front.setSpeed(0);
+    stopTwoMotor(m_left_back, m_right_back);
     setTwoMotorDirection(m_left_back, FORWARD, m_right_front, BACKWARD);
     setTwoMotorSpeed(m_left_back, m_right_front);
 }

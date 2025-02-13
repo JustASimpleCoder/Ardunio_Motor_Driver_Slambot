@@ -55,6 +55,7 @@ enum class RobotMovement: char{
     INVALID = '?'
 };
 
+
 class MotorCommands {
     public:
     
@@ -88,7 +89,10 @@ class MotorCommands {
         void turnRight();
         
         void stopMotors();
+
+        void stopTwoMotor(Motor & motor1, Motor & motor2);
         void setMotorSpeed();
+
         void changeSpeed(bool increase);
         void increaseSpeed();
         void decreaseSpeed();
