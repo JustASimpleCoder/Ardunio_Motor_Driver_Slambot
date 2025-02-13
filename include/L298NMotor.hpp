@@ -4,13 +4,13 @@
 #include "Arduino.h"
 class Motor{
     private:
-        int m_pwm_pin;
-        int m_dir1_pin;
-        int m_dir2_pin;
+        const uint8_t m_pwm_pin;
+        const uint8_t m_dir1_pin;
+        const uint8_t m_dir2_pin;
     public:
-        Motor(int pwm, int dir1, int dir2);
+        Motor(const uint8_t & pwm, const uint8_t & dir1, const uint8_t & dir2);
         
-        void setSpeed(int speed);
+        void setSpeed(const uint8_t & speed);
         void setDirection(bool forward);
         void pinModeSetup();
 };

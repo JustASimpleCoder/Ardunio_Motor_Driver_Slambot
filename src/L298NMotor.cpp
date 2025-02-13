@@ -1,9 +1,9 @@
 #include "L298NMotor.hpp"
 
-Motor::Motor(int pwm, int dir1, int dir2)
+Motor::Motor(const uint8_t & pwm, const uint8_t & dir1, const uint8_t & dir2)
             : m_pwm_pin(pwm), m_dir1_pin(dir1), m_dir2_pin(dir2) {};
 
-void Motor::setSpeed(int speed) {
+void Motor::setSpeed(const uint8_t & speed) {
     analogWrite(m_pwm_pin, speed);
 }
 
