@@ -3,13 +3,11 @@
 #ifndef AUTONOMOUSCONTROLLER_HPP
 #define AUTONOMOUSCONTROLLER_HPP
 
-// #define ANALOG_WRITE_WHEEL_MAX 255
-// #define ANALOG_WRITE_WHEEL_MIN 125
-
-
 #include "Arduino.h"
 #include "L298NMotor.hpp"
 #include "MotorCommands.hpp"
+
+constexpr uint8_t BUFFER_SIZE = 26;
 
 struct VelCmdValues
 {

@@ -104,6 +104,10 @@ void ManualControl::changeSpeed(bool increase) {
     setMotorSpeed(m_wheel_speed);
 }
 
+uint8_t ManualControl::getWheelSpeed(){
+    return m_wheel_speed;
+}
+
 void ManualControl::loopMotorControl() {
 
     if (Serial.available() > 0) {

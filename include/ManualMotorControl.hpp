@@ -30,7 +30,10 @@ class ManualControl : public MotorCommands{
         void increaseSpeed();
         void decreaseSpeed();
 
+        uint8_t getWheelSpeed();
+        
         void loopMotorControl();
+
     private:
         uint8_t m_wheel_speed;
 };

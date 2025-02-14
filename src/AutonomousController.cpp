@@ -16,7 +16,7 @@ AutonomousController::~AutonomousController()
 // };
 
 
-constexpr uint8_t BUFFER_SIZE = 26;
+//constexpr uint8_t BUFFER_SIZE = 26;
  
 VelCmdValues AutonomousController::parseMessage(const char* buffer) {
     VelCmdValues values;
@@ -45,7 +45,6 @@ VelCmdValues AutonomousController::parseMessage(const char* buffer) {
             continue;
         }
 
-        // Parse digits (PWM or direction)
         if (current_char >= '0' && current_char <= '9') {
             value = (is_pwm) ? (value * 10 + (current_char - '0')) : (current_char - '0');
         }
@@ -65,15 +64,10 @@ void AutonomousController::updateSpeedAndDirection(const VelCmdValues & cmd_vel)
 // Main loop for motor control
 void AutonomousController::loopMotorControl() {
     char buffer[BUFFER_SIZE] = {0};
-
     if (Serial.available() > 0) {
-        // Read the message until newline
         size_t num_read = Serial.readBytesUntil('\n', buffer, BUFFER_SIZE - 1);
-
-        // Ensure the message is null-terminated
-        buffer[num_read] = '\0';
-
-        // Parse the message and update motor speeds/directions
+        buffer[num_read] = '\0'; // Ensures the message is null-terminated
+        
         VelCmdValues cmd_vel = parseMessage(buffer);
         updateSpeedAndDirection(cmd_vel);
     }

@@ -2,11 +2,11 @@
 //OOP abstraction for arduino sketch to control the robot
 #ifndef MOTORCOMMANDS_HPP
 #define MOTORCOMMANDS_HPP
-
+#include <stdint.h>
 // #define ANALOG_WRITE_WHEEL_MAX 255
 // #define ANALOG_WRITE_WHEEL_MIN 125
 
-constexpr double PI = 3.14159265; // 358979323846
+//constexpr double PI = 3.14159265; // arduino.h as PI defined apaprently
 constexpr long ARDUINO_SERIAL_BAUD_RATE = 9600;
 constexpr uint8_t SPEED_INCREASE_STEP = 5;
 constexpr uint8_t SPEED_LIMIT_MIN = 150;
@@ -33,10 +33,10 @@ constexpr uint8_t PIN_LF_DIR_2 = 12;
 #include "Arduino.h"
 #include "L298NMotor.hpp"
 
-enum Direction {
-    BACKWARD = 0,
-    FORWARD,
- };
+// enum Direction {
+//     BACKWARD = 0,
+//     FORWARD,
+// };
 
 enum class RobotMovement: char{
     STOP = 'x',
@@ -61,6 +61,11 @@ enum motorPlacement{
     LB = 3
 };
 
+// struct VelCmdValues
+// {
+//     uint8_t pwm_values[4] = {0,0,0,0};
+//     Direction dir_values[4] = {FORWARD,FORWARD,FORWARD,FORWARD};
+// };
 
 class MotorCommands {
     public:
@@ -77,7 +82,7 @@ class MotorCommands {
                             const uint8_t & motor_RF_speed,
                             const uint8_t & motor_RB_speed); 
 
-        void setMotorSpeed( const uint8_t & motor_LF_speed);
+        void setMotorSpeed(const uint8_t & speed);
 
         void setMotorDirection( Motor & motor, const Direction & direction);
 
@@ -98,6 +103,8 @@ class MotorCommands {
         void setStartingSpeed();
 
         void setupArduino();
+
+        Motor ** getMotors();
 
     protected:
         Motor * m_motors[4] = {&m_motor_RB, &m_motor_RF, &m_motor_LF, &m_motor_LB};
