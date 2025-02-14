@@ -6,6 +6,7 @@ MotorCommands::MotorCommands():
                     m_motor_LF(PIN_LB_PWM, PIN_LB_DIR_1, PIN_LB_DIR_2), 
                     m_motor_LB(PIN_LF_PWM, PIN_LF_DIR_1,PIN_LF_DIR_2)
                     {};
+                    
 MotorCommands::~MotorCommands(){}
 
 void MotorCommands::setMotorSpeed(Motor & motor, const uint8_t  & speed){

@@ -49,6 +49,7 @@ void ManualControl::moveForwardRightDiag(){
     setMotorDirection(*m_motors[LF], FORWARD, *m_motors[RB], BACKWARD);
     setMotorSpeed(*m_motors[LF], m_wheel_speed, *m_motors[RB], m_wheel_speed);
 }
+
 void ManualControl::moveForwardLeftDiag(){
     //left_front wheel OFF
     //right_front wheel Forward
@@ -100,9 +101,8 @@ void ManualControl::decreaseSpeed() {
 void ManualControl::changeSpeed(bool increase) {
     m_wheel_speed += (increase) ?  SPEED_INCREASE_STEP : -SPEED_INCREASE_STEP;   
     m_wheel_speed = constrain(m_wheel_speed, SPEED_LIMIT_MIN, SPEED_LIMIT_MAX);
-    setMotorSpeed(m_wheel_speed, m_wheel_speed, m_wheel_speed, m_wheel_speed);
+    setMotorSpeed(m_wheel_speed);
 }
-
 
 void ManualControl::loopMotorControl() {
 

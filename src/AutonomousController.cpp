@@ -9,12 +9,76 @@ AutonomousController::~AutonomousController()
 {
 }
 
-void AutonomousController::loopMotorControl(){
-    //TO_DO
-    // serial.ReadLine
-    // parse message, likely wheel "speed" (PWM value, derived from ivnerse kinematics and motor params)
-    // and direction for each wheel
+// struct VelCmdValues
+// {
+//     uint8_t pwm_values[4] = {0,0,0,0};
+//     Direction dir_values[4] = {FORWARD,FORWARD,FORWARD,FORWARD};
+// };
+
+
+constexpr uint8_t BUFFER_SIZE = 26;
+ 
+VelCmdValues AutonomousController::parseMessage(const char* buffer) {
+    VelCmdValues values;
+    uint8_t current_wheel = 0;
+    bool is_pwm = true;  // Start with parsing PWM values
+    uint8_t value = 0;   // Temporary variable to store parsed values
+
+    for (int i = 0; i < BUFFER_SIZE; i++) {
+        char current_char = buffer[i];
+
+        // End of message
+        if (current_char == '\r' || current_char == '\n') {
+            break;
+        }
+
+        // Handle comma separator
+        if (current_char == ',') {
+            if (is_pwm) {
+                values.pwm_values[current_wheel] = value;
+            } else {
+                values.dir_values[current_wheel] = static_cast<Direction>(value);
+                current_wheel++;  // Move to the next wheel
+            }
+            value = 0;  // Reset the temporary value
+            is_pwm = !is_pwm;  // Toggle between PWM and direction
+            continue;
+        }
+
+        // Parse digits (PWM or direction)
+        if (current_char >= '0' && current_char <= '9') {
+            value = (is_pwm) ? (value * 10 + (current_char - '0')) : (current_char - '0');
+        }
+    }
+
+    return values;
 }
+
+// Function to update motor speed and direction
+void AutonomousController::updateSpeedAndDirection(const VelCmdValues & cmd_vel) {
+    for (int i = 0; i < 4; i++) {
+        setMotorSpeed(*m_motors[i], cmd_vel.pwm_values[i]);
+        setMotorDirection(*m_motors[i], cmd_vel.dir_values[i]);
+    }
+}
+
+// Main loop for motor control
+void AutonomousController::loopMotorControl() {
+    char buffer[BUFFER_SIZE] = {0};
+
+    if (Serial.available() > 0) {
+        // Read the message until newline
+        size_t num_read = Serial.readBytesUntil('\n', buffer, BUFFER_SIZE - 1);
+
+        // Ensure the message is null-terminated
+        buffer[num_read] = '\0';
+
+        // Parse the message and update motor speeds/directions
+        VelCmdValues cmd_vel = parseMessage(buffer);
+        updateSpeedAndDirection(cmd_vel);
+    }
+}
+
 
 // MotorCommands::MotorCommands()
 //                 :   m_wheel_speed(0),

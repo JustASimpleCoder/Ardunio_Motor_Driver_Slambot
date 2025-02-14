@@ -11,14 +11,22 @@
 #include "L298NMotor.hpp"
 #include "MotorCommands.hpp"
 
+struct VelCmdValues
+{
+    uint8_t pwm_values[4] = {0,0,0,0};
+    Direction dir_values[4] = {FORWARD,FORWARD,FORWARD,FORWARD};
+};
+
 class AutonomousController: public MotorCommands
 {
-private:
-    /* data */
-public:
-    AutonomousController(/* args */);
-    ~AutonomousController();
-    void loopMotorControl();
+    private:
+        
+    public:
+        AutonomousController(/* args */);
+        ~AutonomousController();
+        void loopMotorControl();
+        VelCmdValues parseMessage(const char* buffer);
+        void updateSpeedAndDirection(const VelCmdValues & cmd_vel);
 };
 
 
