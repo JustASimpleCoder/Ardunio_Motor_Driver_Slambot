@@ -8,10 +8,10 @@ ManualControl commands;
 //AutonomousControl commands
 #endif
 
-void setup() {
-    commands.setupArduino();
+void setup() { 
+    commands.setupArduino(); 
 }
 
 void loop() {
-    commands.loopMotorControl();
+    commands.updateMotorControl();
 }

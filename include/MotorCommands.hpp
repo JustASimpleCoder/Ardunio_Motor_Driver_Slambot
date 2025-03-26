@@ -72,40 +72,39 @@ class MotorCommands {
         MotorCommands();
         ~MotorCommands();
 
-        void setMotorSpeed( Motor & motor, const uint8_t & speed);
+        void setMotorSpeed(const uint8_t& speed);
+        void setMotorSpeed( Motor& motor, const uint8_t& speed);
 
-        void setMotorSpeed( Motor & motor_1, const uint8_t & speed_1,
-                            Motor & motor_2, const uint8_t & speed_2);
+        void setMotorSpeed( Motor& motor_1, const uint8_t& speed_1,
+                            Motor& motor_2, const uint8_t& speed_2);
 
-        void setMotorSpeed( const uint8_t & motor_LF_speed,
-                            const uint8_t & motor_LB_speed,
-                            const uint8_t & motor_RF_speed,
-                            const uint8_t & motor_RB_speed); 
-
-        void setMotorSpeed(const uint8_t & speed);
-
-        void setMotorDirection( Motor & motor, const Direction & direction);
-
-        void setMotorDirection( Motor & motor_1, const Direction & direction_1,
-                                Motor & motor_2, const Direction & direction_2);
-
-        void setMotorDirection( const Direction & motor_LF_direction, 
-                                const Direction & motor_LB_direction,
-                                const Direction & motor_RF_direction, 
-                                const Direction & motor_RB_direction);
+        void setMotorSpeed( const uint8_t& motor_LF_speed,
+                            const uint8_t& motor_LB_speed,
+                            const uint8_t& motor_RF_speed,
+                            const uint8_t& motor_RB_speed); 
         
-        void stopMotors(Motor & motor);
-        void stopMotors(Motor & motor_1, Motor & motor_2);
+
+        void setMotorDirection( Motor& motor, const Direction& direction);
+
+        void setMotorDirection( Motor& motor_1, const Direction& direction_1,
+                                Motor& motor_2, const Direction& direction_2);
+
+        void setMotorDirection( const Direction& motor_LF_direction, 
+                                const Direction& motor_LB_direction,
+                                const Direction& motor_RF_direction, 
+                                const Direction& motor_RB_direction);
+        
+        void stopMotors(Motor& motor);
+        void stopMotors(Motor& motor_1, Motor & motor_2);
         void stopMotors();
         
-        void setStartingSpeed(Motor & motor);
-        void setStartingSpeed(Motor & motor_1, Motor & motor_2);
+        void setStartingSpeed(Motor& motor);
+        void setStartingSpeed(Motor& motor_1, Motor& motor_2);
         void setStartingSpeed();
 
         void setupArduino();
 
         Motor ** getMotors();
-
     protected:
         Motor * m_motors[4] = {&m_motor_RB, &m_motor_RF, &m_motor_LF, &m_motor_LB};
     private:

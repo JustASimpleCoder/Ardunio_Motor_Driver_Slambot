@@ -18,14 +18,17 @@ class Motor{
         uint8_t m_speed;
         Direction m_dir;
     public:
-        Motor(const uint8_t & pwm, const uint8_t & dir1, const uint8_t & dir2);
-        
-        void setSpeed(const uint8_t & speed);
+        Motor(const uint8_t& pwm, const uint8_t& dir1, const uint8_t& dir2);
+        Motor::Motor(const Motor& motor);
+        ~Motor() = default;
+        void setSpeed(const uint8_t& speed);
         void setDirection(bool forward);
-        void pinModeSetup();
+        void pinModeSetup() const;
 
         uint8_t getSpeed() const;
         Direction getDirection() const;
+
+        Motor& operator=(const Motor& motor_1);
     
 };
 #endif

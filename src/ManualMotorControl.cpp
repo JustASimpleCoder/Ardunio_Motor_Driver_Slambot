@@ -108,7 +108,7 @@ uint8_t ManualControl::getWheelSpeed(){
     return m_wheel_speed;
 }
 
-void ManualControl::loopMotorControl() {
+void ManualControl::updateMotorControl() {
 
     if (Serial.available() > 0) {
         char input = Serial.read();

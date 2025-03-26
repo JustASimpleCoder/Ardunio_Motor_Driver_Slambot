@@ -32,7 +32,7 @@ class ManualControl : public MotorCommands{
 
         uint8_t getWheelSpeed();
         
-        void loopMotorControl();
+        void updateMotorControl();
 
     private:
         uint8_t m_wheel_speed;

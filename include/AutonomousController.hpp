@@ -1,5 +1,4 @@
 
-//OOP abstraction for arduino sketch to control the robot
 #ifndef AUTONOMOUSCONTROLLER_HPP
 #define AUTONOMOUSCONTROLLER_HPP
 
@@ -17,14 +16,15 @@ struct VelCmdValues
 
 class AutonomousController: public MotorCommands
 {
-    private:
-        
     public:
-        AutonomousController(/* args */);
+        AutonomousController();
         ~AutonomousController();
-        void loopMotorControl();
         VelCmdValues parseMessage(const char* buffer);
         void updateSpeedAndDirection(const VelCmdValues & cmd_vel);
+        void updateMotorControl();
+
+    private:
+        
 };
 
 
