@@ -20,6 +20,10 @@ void Motor::setDirection(bool forward) {
     m_dir = static_cast<Direction>(forward);
 }
 
+void Motor::setDirection(Direction dir){
+    (dir == Direction::FORWARD) ? setDirection(true) : setDirection(false);
+}
+
 void Motor::pinModeSetup() const{
     pinMode(m_pwm_pin, OUTPUT);
     pinMode(m_dir1_pin, OUTPUT);

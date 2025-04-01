@@ -6,16 +6,20 @@ ManualControl::ManualControl()
 ManualControl::~ManualControl(){};
 
 void ManualControl::moveForward() {
+    m_wheel_speed += SPEED_INCREASE_STEP;
     setMotorSpeed(m_wheel_speed);
     setMotorDirection(FORWARD, BACKWARD, FORWARD, BACKWARD);
+    
 }
 
 void ManualControl::moveBackward() {
+    m_wheel_speed += SPEED_INCREASE_STEP;
     setMotorSpeed(m_wheel_speed);
     setMotorDirection(BACKWARD, FORWARD, BACKWARD, FORWARD);
 }
 
 void ManualControl::turnLeft() {
+    m_wheel_speed += SPEED_INCREASE_STEP;
     setMotorSpeed(m_wheel_speed);
     setMotorDirection(BACKWARD, FORWARD, FORWARD, BACKWARD);
 }
@@ -40,7 +44,7 @@ void ManualControl::moveForwardRightDiag(){
     //left_back_wheel OFF
     //right_Front wheel OFF
     //right_back wheel "forward" -> back wheel "forwards" is backwards
-    setStartingSpeed();
+    //setStartingSpeed();
     // m_left_back.setSpeed(0);
     // m_right_front.setSpeed(0);
     //stopMotors(m_left_back, m_right_front);
@@ -55,7 +59,7 @@ void ManualControl::moveForwardLeftDiag(){
     //right_front wheel Forward
     //left_back wheel "forward" -> back wheel "forwards" is backwards
     //right_Back  wheel OFF 
-    setStartingSpeed();
+    //setStartingSpeed();
     // m_left_front.setSpeed(0);
     // m_right_back.setSpeed(0);
     //stopMotors(m_left_front, m_right_back);
@@ -68,7 +72,7 @@ void ManualControl::moveForwardLeftDiag(){
 
 void ManualControl::moveBackwardRightDiag(){
     //opposite of forward left
-    setStartingSpeed();
+    //setStartingSpeed();
     // m_left_front.setSpeed(0);
     // m_right_back.setSpeed(0);
     //stopMotors(m_left_back, m_right_back);
@@ -80,7 +84,7 @@ void ManualControl::moveBackwardRightDiag(){
 
 void ManualControl::moveBackwardLeftDiag(){
     //opposite of forward right
-    setStartingSpeed();
+    //setStartingSpeed();
     // m_left_back.setSpeed(0);
     // m_right_front.setSpeed(0);
     // stopMotors(m_left_back, m_right_back);
@@ -116,7 +120,7 @@ void ManualControl::updateMotorControl() {
             case static_cast<char>(RobotMovement::STOP):
                 stopMotors();
                 break;
-            case static_cast<char>(RobotMovement::MOVE_FORWARD):
+            case static_cast<char>(RobotMovement::MOVE_FORWARD):   
                 moveForward();
                 break;
             case static_cast<char>(RobotMovement::MOVE_BACKWARD):
@@ -156,6 +160,7 @@ void ManualControl::updateMotorControl() {
                 //fall through for now, but may auto decrease speed so you must hold down button
                 break;
         }
+
     }
     // do not want to overload CPU and ensure all motor code finishes beofre next character check
     //delay(50);

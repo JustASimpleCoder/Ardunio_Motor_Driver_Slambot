@@ -19,10 +19,11 @@ class Motor{
         Direction m_dir;
     public:
         Motor(const uint8_t& pwm, const uint8_t& dir1, const uint8_t& dir2);
-        Motor::Motor(const Motor& motor);
+        Motor(const Motor& motor);
         ~Motor() = default;
         void setSpeed(const uint8_t& speed);
         void setDirection(bool forward);
+        void setDirection(Direction dir);
         void pinModeSetup() const;
 
         uint8_t getSpeed() const;

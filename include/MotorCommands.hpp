@@ -9,7 +9,7 @@
 //constexpr double PI = 3.14159265; // arduino.h as PI defined apaprently
 constexpr long ARDUINO_SERIAL_BAUD_RATE = 9600;
 constexpr uint8_t SPEED_INCREASE_STEP = 5;
-constexpr uint8_t SPEED_LIMIT_MIN = 150;
+constexpr uint8_t SPEED_LIMIT_MIN = 125;
 constexpr uint8_t SPEED_LIMIT_MAX = 255;
 
 constexpr uint8_t PIN_RB_PWM = 5;
@@ -20,13 +20,21 @@ constexpr uint8_t PIN_RF_PWM = 6;
 constexpr uint8_t PIN_RF_DIR_1 = 4;
 constexpr uint8_t PIN_RF_DIR_2 = 7;
 
-constexpr uint8_t PIN_LB_PWM = 9;
-constexpr uint8_t PIN_LB_DIR_1 = 11;
-constexpr uint8_t PIN_LB_DIR_2 = 8;
+constexpr uint8_t PIN_LF_PWM = 9;
+constexpr uint8_t PIN_LF_DIR_1 = 11;
+constexpr uint8_t PIN_LF_DIR_2 = 8;
 
-constexpr uint8_t PIN_LF_PWM = 10;
-constexpr uint8_t PIN_LF_DIR_1 = 13;
-constexpr uint8_t PIN_LF_DIR_2 = 12;
+constexpr uint8_t PIN_LB_PWM = 10;
+constexpr uint8_t PIN_LB_DIR_1 = 13;
+constexpr uint8_t PIN_LB_DIR_2 = 12;
+
+// constexpr uint8_t PIN_LB_PWM = 9;
+// constexpr uint8_t PIN_LB_DIR_1 = 11;
+// constexpr uint8_t PIN_LB_DIR_2 = 8;
+
+// constexpr uint8_t PIN_LF_PWM = 10;
+// constexpr uint8_t PIN_LF_DIR_1 = 13;
+// constexpr uint8_t PIN_LF_DIR_2 = 12;
 
 
 
@@ -106,8 +114,8 @@ class MotorCommands {
 
         Motor ** getMotors();
     protected:
-        Motor * m_motors[4] = {&m_motor_RB, &m_motor_RF, &m_motor_LF, &m_motor_LB};
-    private:
+        Motor * m_motors[4]; // = {&m_motor_RB, &m_motor_RF, &m_motor_LF, &m_motor_LB};
+    private:    
         Motor m_motor_RB;
         Motor m_motor_RF;
         Motor m_motor_LF;

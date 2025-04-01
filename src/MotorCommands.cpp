@@ -3,15 +3,27 @@
 MotorCommands::MotorCommands():        
                     m_motor_RB(PIN_RB_PWM, PIN_RB_DIR_1, PIN_RB_DIR_2), 
                     m_motor_RF(PIN_RF_PWM, PIN_RF_DIR_1, PIN_RF_DIR_2),
-                    m_motor_LF(PIN_LB_PWM, PIN_LB_DIR_1, PIN_LB_DIR_2), 
-                    m_motor_LB(PIN_LF_PWM, PIN_LF_DIR_1, PIN_LF_DIR_2)
-                    {};
+                    m_motor_LF(PIN_LF_PWM, PIN_LF_DIR_1, PIN_LF_DIR_2), 
+                    m_motor_LB(PIN_LB_PWM, PIN_LB_DIR_1, PIN_LB_DIR_2)
+                    // m_motor_LF(PIN_LB_PWM, PIN_LB_DIR_1, PIN_LB_DIR_2), 
+                    // m_motor_LB(PIN_LF_PWM, PIN_LF_DIR_1, PIN_LF_DIR_2)
+                    {
+                        // Initialize motor pointers
+                        m_motors[RB] = &m_motor_RB; 
+                        m_motors[RF] = &m_motor_RF;
+                        m_motors[LF] = &m_motor_LF;
+                        m_motors[LB] = &m_motor_LB;
+                    };
 
 MotorCommands::~MotorCommands(){}
 
 void MotorCommands::setMotorSpeed(Motor& motor, const uint8_t& speed){
-    constrain(speed, SPEED_LIMIT_MIN, SPEED_LIMIT_MAX);
-    motor.setSpeed(speed);
+    // constrain(speed, SPEED_LIMIT_MIN, SPEED_LIMIT_MAX);
+    if(speed != 0 && speed < SPEED_LIMIT_MIN){
+        motor.setSpeed(SPEED_LIMIT_MIN);
+    }else{
+        motor.setSpeed(speed);
+    }
 }
 
 void MotorCommands::setMotorSpeed(  Motor& motor_1, const uint8_t& speed_1,
@@ -26,6 +38,12 @@ void MotorCommands::setMotorSpeed(  const uint8_t& motor_LF_speed,
                                     const uint8_t& motor_RF_speed,
                                     const uint8_t& motor_RB_speed)
 {
+
+    // setMotorSpeed(*m_motors[LF], motor_LF_speed);
+    // setMotorSpeed(*m_motors[LB], motor_LB_speed);
+    // setMotorSpeed(*m_motors[RF], motor_RF_speed);
+    // setMotorSpeed(*m_motors[RB], motor_RB_speed);
+
     setMotorSpeed(m_motor_LF, motor_LF_speed);
     setMotorSpeed(m_motor_LB, motor_LB_speed);
     setMotorSpeed(m_motor_RF, motor_RF_speed);
@@ -33,6 +51,7 @@ void MotorCommands::setMotorSpeed(  const uint8_t& motor_LF_speed,
 }
 
 void MotorCommands::setMotorSpeed( const uint8_t& speed){
+   
     setMotorSpeed(speed, speed, speed, speed);
 }
 

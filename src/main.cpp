@@ -10,8 +10,11 @@ ManualControl commands;
 
 void setup() { 
     commands.setupArduino(); 
+
+    Serial.println("Setup complete");
 }
 
 void loop() {
+    
     commands.updateMotorControl();
 }
